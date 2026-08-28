@@ -26,59 +26,88 @@ class _PredictorFormState extends State<PredictorForm> {
   final _empIdController = TextEditingController(text: 'EMP_001');
   String _gender = 'Male';
   String _maritalStatus = 'Single';
-  String _educationLevel = 'Bachelor';
+  String _educationLevel = 'Graduate';
   double _age = 32;
 
-  String _department = 'Engineering';
-  String _jobRole = 'Software Engineer';
+  String _department = 'HR';
+  String _jobRole = 'Executive';
   String _position = 'Mid-Level';
   String _employmentType = 'Full-time';
-  String _state = 'California';
+  String _state = 'Punjab';
   final _tenureController = TextEditingController(text: '4');
 
   String _satisfaction = 'Medium';
   final _incomeController = TextEditingController(text: '75000');
   final _ctcController = TextEditingController(text: '90000');
 
-  // Department -> Job Roles mapping
-  final Map<String, List<String>> _departmentRoles = {
-    'Engineering': [
-      'Software Engineer',
-      'Senior Backend Dev',
-      'DevOps Specialist',
-      'Engineering Manager',
-    ],
-    'Sales': [
-      'Account Executive',
-      'Sales Director',
-      'Business Dev Rep',
-      'Enterprise Account Mgr',
-    ],
-    'Marketing': [
-      'Growth Marketer',
-      'Content Strategist',
-      'Brand Manager',
-      'Performance Specialist',
-    ],
-    'Human Resources': [
-      'HR Generalist',
-      'Talent Acquisition Lead',
-      'People Operations Mgr',
-      'HRBP',
-    ],
-    'Product': [
-      'Product Manager',
-      'Senior PM',
-      'Product Lead',
-      'UX Designer',
-    ],
-    'Finance': [
-      'Financial Analyst',
-      'Senior Controller',
-      'Risk Analyst',
-      'Accountant',
-    ],
-  };
+  static const List<String> _genderOptions = [
+    'Male',
+    'Female',
+    'Non-Binary',
+    'Other',
+  ];
+
+  static const List<String> _maritalStatusOptions = [
+    'Single',
+    'Divorced',
+    'Married',
+  ];
+
+  static const List<String> _educationLevelOptions = [
+    'Diploma',
+    'High School',
+    'Graduate',
+    'PhD',
+    'Postgraduate',
+  ];
+
+  static const List<String> _departmentOptions = [
+    'HR',
+    'Finance',
+    'Operations',
+    'Customer Support',
+    'Sales',
+    'Supply Chain',
+    'IT',
+    'Marketing',
+  ];
+
+  static const List<String> _jobRoleOptions = [
+    'Executive',
+    'Assistant',
+    'Supervisor',
+    'Technician',
+    'Specialist',
+    'Analyst',
+    'Coordinator',
+    'Manager',
+  ];
+
+  static const List<String> _positionOptions = [
+    'Junior',
+    'Senior',
+    'Mid-Level',
+    'Lead',
+  ];
+
+  static const List<String> _employmentTypeOptions = [
+    'Full-time',
+    'Contract',
+    'Part-time',
+  ];
+
+  static const List<String> _stateOptions = [
+    'Punjab',
+    'West Bengal',
+    'Tamil Nadu',
+    'Karnataka',
+    'Maharashtra',
+    'Uttar Pradesh',
+    'Rajasthan',
+    'Delhi',
+    'Madhya Pradesh',
+    'Gujarat',
+  ];
 
   @override
   void initState() {
@@ -95,15 +124,6 @@ class _PredictorFormState extends State<PredictorForm> {
     _incomeController.dispose();
     _ctcController.dispose();
     super.dispose();
-  }
-
-  void _onDepartmentChanged(String? newDept) {
-    if (newDept == null) return;
-    setState(() {
-      _department = newDept;
-      final roles = _departmentRoles[_department] ?? ['Software Engineer'];
-      _jobRole = roles.first;
-    });
   }
 
   void _submitForm() {
@@ -131,8 +151,6 @@ class _PredictorFormState extends State<PredictorForm> {
 
   @override
   Widget build(BuildContext context) {
-    final availableRoles = _departmentRoles[_department] ?? ['Software Engineer'];
-
     return Container(
       decoration: BoxDecoration(
         color: AppTheme.brandDarkCard,
@@ -170,7 +188,7 @@ class _PredictorFormState extends State<PredictorForm> {
                 _buildDropdown(
                   label: 'Gender *',
                   value: _gender,
-                  items: const ['Male', 'Female', 'Non-Binary', 'Other'],
+                  items: _genderOptions,
                   onChanged: (val) => setState(() => _gender = val!),
                 ),
               ],
@@ -182,13 +200,13 @@ class _PredictorFormState extends State<PredictorForm> {
                 _buildDropdown(
                   label: 'Marital Status',
                   value: _maritalStatus,
-                  items: const ['Single', 'Married', 'Divorced'],
+                  items: _maritalStatusOptions,
                   onChanged: (val) => setState(() => _maritalStatus = val!),
                 ),
                 _buildDropdown(
                   label: 'Education Level',
                   value: _educationLevel,
-                  items: const ['High School', 'Bachelor', "Master's", 'Doctorate'],
+                  items: _educationLevelOptions,
                   onChanged: (val) => setState(() => _educationLevel = val!),
                 ),
               ],
@@ -211,13 +229,13 @@ class _PredictorFormState extends State<PredictorForm> {
                 _buildDropdown(
                   label: 'Department *',
                   value: _department,
-                  items: _departmentRoles.keys.toList(),
-                  onChanged: _onDepartmentChanged,
+                  items: _departmentOptions,
+                  onChanged: (val) => setState(() => _department = val!),
                 ),
                 _buildDropdown(
                   label: 'Job Role *',
-                  value: availableRoles.contains(_jobRole) ? _jobRole : availableRoles.first,
-                  items: availableRoles,
+                  value: _jobRole,
+                  items: _jobRoleOptions,
                   onChanged: (val) => setState(() => _jobRole = val!),
                 ),
               ],
@@ -229,24 +247,13 @@ class _PredictorFormState extends State<PredictorForm> {
                 _buildDropdown(
                   label: 'Position',
                   value: _position,
-                  items: const [
-                    'Entry-Level',
-                    'Mid-Level',
-                    'Senior',
-                    'Lead / Principal',
-                    'Executive',
-                  ],
+                  items: _positionOptions,
                   onChanged: (val) => setState(() => _position = val!),
                 ),
                 _buildDropdown(
                   label: 'Employment Type',
                   value: _employmentType,
-                  items: const [
-                    'Full-time',
-                    'Part-Time',
-                    'Contract',
-                    'Hybrid-Remote',
-                  ],
+                  items: _employmentTypeOptions,
                   onChanged: (val) => setState(() => _employmentType = val!),
                 ),
               ],
@@ -258,15 +265,7 @@ class _PredictorFormState extends State<PredictorForm> {
                 _buildDropdown(
                   label: 'State',
                   value: _state,
-                  items: const [
-                    'California',
-                    'Texas',
-                    'New York',
-                    'Washington',
-                    'Illinois',
-                    'Massachusetts',
-                    'Other',
-                  ],
+                  items: _stateOptions,
                   onChanged: (val) => setState(() => _state = val!),
                 ),
                 _buildTextField(

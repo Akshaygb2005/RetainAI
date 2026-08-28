@@ -108,3 +108,7 @@ def predict_attrition(payload: PredictionRequest, db: Session = Depends(get_db))
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# To run -> python -m uvicorn main:app --reload --host [IP_ADDRESS] --port 8000
+# To test -> http://localhost:8000/docs
