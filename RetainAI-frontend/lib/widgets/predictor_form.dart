@@ -304,16 +304,16 @@ class _PredictorFormState extends State<PredictorForm> {
               children: [
                 _buildTextField(
                   controller: _incomeController,
-                  label: 'Annual Income (\$)',
+                  label: 'Annual Income (₹)',
                   hint: 'e.g. 75000',
-                  prefixText: '\$ ',
+                  prefixText: '₹ ',
                   keyboardType: TextInputType.number,
                 ),
                 _buildTextField(
                   controller: _ctcController,
-                  label: 'Employee Cost to Company (\$)',
+                  label: 'Employee Cost to Company (₹)',
                   hint: 'e.g. 90000',
-                  prefixText: '\$ ',
+                  prefixText: '₹ ',
                   keyboardType: TextInputType.number,
                 ),
               ],

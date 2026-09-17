@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 import pandas as pd
 import joblib
+from fastapi.middleware.cors import CORSMiddleware
 
 from database import get_db, init_db, PredictionRecord
 
@@ -10,6 +11,13 @@ init_db()
 pipeline = joblib.load("log_reg_pipeline.joblib")
 
 app = FastAPI(title="Employee Attrition Prediction API (Upsert Enabled)")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],          # Allows all origins (Flutter web, localhost ports)
+    allow_credentials=True,
+    allow_methods=["*"],          # Allows POST, OPTIONS, GET, etc.
+    allow_headers=["*"],          # Allows Content-Type, Authorization, etc.
+)
 
 class PredictionRequest(BaseModel):
     Employee_ID: str
@@ -62,7 +70,7 @@ def predict_attrition(payload: PredictionRequest, db: Session = Depends(get_db))
 
         # 3. Check if employee already exists in MySQL
         #db.query(PredictionRecord): Initiates a SQLAlchemy SELECT query targeting the prediction_records table.
-        #.filter(PredictionRecord.employee_id == payload.employee_id): Translates to SQL WHERE employee_id = '...'. It looks specifically for a row matching the ID passed in the current API request.
+        #.filter(PredictionRecord.Employee_ID == payload.Employee_ID): Translates to SQL WHERE Employee_ID = '...'. It looks specifically for a row matching the ID passed in the current API request.
         #.first(): Executes the query and returns the first matching record as a Python object. If no record exists with that ID, it returns None.
         existing_record = (
             db.query(PredictionRecord)
@@ -110,5 +118,5 @@ def predict_attrition(payload: PredictionRequest, db: Session = Depends(get_db))
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# To run -> python -m uvicorn main:app --reload --host [IP_ADDRESS] --port 8000
+# To run -> python -m uvicorn main:app --reload --host [IP_ADDRESS 0.0.0.0] --port 8000
 # To test -> http://localhost:8000/docs

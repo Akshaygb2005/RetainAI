@@ -33,7 +33,7 @@ class EmployeePredictionRequest {
 
   Map<String, dynamic> toJson() {
     return {
-      "Employee_Id": employeeId,
+      "Employee_ID": employeeId,
       "Gender": gender,
       "Age": age,
       "Years_at_Company": yearsAtCompany,
@@ -75,8 +75,8 @@ class EmployeePredictionResponse {
       attritionStatus.toLowerCase() == 'true';
 
   factory EmployeePredictionResponse.fromJson(Map<String, dynamic> json) {
-    // Handle both field name variations safely
-    final empId = json['employee_id'] ?? json['Employee_Id'] ?? 'EMP-UNKNOWN';
+    // Handle field name variations safely
+    final empId = json['Employee_ID'] ?? json['Employee_Id'] ?? json['employee_id'] ?? 'EMP-UNKNOWN';
     final status = json['Attrition_Status'] ?? json['attrition_status'] ?? 'No';
     
     double conf = 85.0;
